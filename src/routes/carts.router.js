@@ -123,6 +123,8 @@ router.delete('/:cid', async (req, res) => {
 
 // (POST) Agregar un producto al carrito o incrementar cantidad
 router.post('/:cid/products/:pid', async (req, res) => {
+  // console.log("POST recibido en /api/carts/:cid/products/:pid");
+
   try {
     const { cid, pid } = req.params;
     const { quantity = 1} = req.body;
@@ -144,7 +146,7 @@ router.post('/:cid/products/:pid', async (req, res) => {
 
     await cart.save();
 
-    res.redirect('/products');
+    res.redirect(`/carts/${cid}`);
 
   } catch (error) {
     res.status(500).json({ status: 'error', message: 'Error al agregar producto al carrito', error: error.message});

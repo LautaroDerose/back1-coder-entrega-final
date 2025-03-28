@@ -1,10 +1,9 @@
 import express from 'express';
-import { ProductModel } from '../models/Product.js';
+import { ProductModel } from '../models/product.model.js';
 
 const router = express.Router();
 
 // GET /api/products
-
 router.get('/', async (req, res) => {
   try {
     const {
@@ -66,50 +65,6 @@ router.get('/', async (req, res) => {
     });
   }
 });
-
-
-// (GET) para vista poaginada de productos
-router.get('/products', async (req, res) => {
-  try {
-    const { page =1, limit = 10, sort, query } = req.query;
-
-    const filters = {};
-    if(query) {
-      if (query === 'true' || query === 'false') {
-        filters.status = query === 'true';
-      } else {
-        filters.category = query ;
-      }
-    }
-
-    const sortOptions = {};
-    if(sort === 'asc') sortOptions.price = 1;
-    if(sort === 'desc') sortOptions.price = -1;
-
-    const result = await ProductModel.paginate(filters, { page, limit, sort:sortOptions, lean: true});
-
-    const buildLink = (p) => 
-      `/products?limit=${limit}&page=${p}` + 
-      (query ? `&query=${query}`: '') +
-      (sort ? `&sort=${sort}` : '');
-
-      // const cartId = '' //Aqui poner id de prueba
-
-      res.render('products', {
-        products: result.docs, 
-        totalPages: result.totalPages,
-        page: result.page,
-        hasPrevPage: result.hasPrevPage,
-        hasNextPage: result.hasNextPage,
-        prevLink: result.hasPrevPage ? buildLink(result.prevPage) : null,
-        nextLink: result.hasNextPage ? buildLink(result.nextPage) : null,
-        // cartId
-      });
-
-  } catch (error) {
-    res.status(500).send('Error al cargar los productos')
-  }
-})
 
 
 

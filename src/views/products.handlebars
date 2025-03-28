@@ -3,13 +3,16 @@
 <div class="product-list">
   {{#each products}}
   <div class="product-card">
+    <p>ID del carrito {{../cartId}}</p>
     <h2>{{title}}</h2>
     <p>{{description}}</p>
+    <p>id:: {{id}}</p>
     <p>$ {{price}}</p>
     <p>Categoria: {{category}}</p>
     <form
       method="post"
-      action="/api/carts/{{cartId}}/products/{{_id}}"
+      {{!-- action="/api/carts/67e6dd19386e5c76bb3c7f35/products/{{this._id}}" --}}
+      action="/api/carts/{{../cartId}}/products/{{this._id}}"
     >
       <input type="number" name="quantity" value="1" min="1" />
       <button type="submit">Agregar a carrito</button>
