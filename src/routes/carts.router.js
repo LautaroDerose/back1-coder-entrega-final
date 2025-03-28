@@ -5,11 +5,10 @@ const router = express.Router();
 
 
 // (GET) Obtener carrito con productos
-router.get(':cid', async (req, res) => {
+router.get('/:cid', async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await CartModel.findById({ _id: cid})
-    // const cart = await CartModel.findOne({ _id: cid }); // populate automático //codigo sugerido
+    const cart = await CartModel.findById(cid).populate('products.product')
 
     if(!cart) {
       return res.status(404).json({ status: 'error', message: 'Carrito no encontrado'});
@@ -23,7 +22,7 @@ router.get(':cid', async (req, res) => {
 });
 
 // (ELIMINAR) eliminar UN produycto del carrito
-router.delete('/:cid/products/pid', async (req, res) => {
+router.delete('/:cid/products/:pid', async (req, res) => {
   try {
     const {cid, pid} = req.params;
     const cart = await CartModel.findById(cid);
@@ -37,7 +36,7 @@ router.delete('/:cid/products/pid', async (req, res) => {
     );
 
     await cart.save();
-    res.json({ status: 'success', message: `Producto ${nombre} de id: ${pid} eliminado del carrito ${cid}`});
+    res.json({ status: 'success', message: `Producto de id: ${pid} eliminado del carrito ${cid}`});
     
   } catch (error) {
     res.status(500).json({ status: 'error', message: 'Error al eliminar producto del carrito', error: error.message });
