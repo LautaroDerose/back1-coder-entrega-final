@@ -3,16 +3,8 @@ import { ProductModel } from '../models/Product.js';
 
 const router = express.Router();
 
-/**
- * GET /api/products
- * Endpoint para obtener productos con paginación, filtros y ordenamiento.
- * 
- * Query params disponibles:
- * - limit: número de resultados por página (default: 10)
- * - page: número de página (default: 1)
- * - sort: orden por precio (asc o desc)
- * - query: categoría o disponibilidad (true/false)
- */
+// GET /api/products
+
 router.get('/', async (req, res) => {
   try {
     const {
